@@ -1,5 +1,6 @@
 variable "name" {}
 variable "project_id" {}
+variable "project_number" {} //TODO: Retrieve using data
 variable "region" {}
 variable "image" {}
 variable "min_scale" {}

@@ -5,6 +5,7 @@ resource "google_cloud_run_service" "this" {
   
   name     = var.name
   location = var.region
+  project = var.project_id
 
   template {
     spec {
@@ -68,16 +69,16 @@ resource "google_cloud_run_service" "this" {
   }
 }
 
-# resource "google_cloud_run_service_iam_member" "allUsers" {
-#   service  = google_cloud_run_service.this.name
-#   location = google_cloud_run_service.this.location
-#   role     = "roles/run.invoker"
-#   member   = "allUsers"
-# }
+resource "google_cloud_run_service_iam_member" "allUsers" {
+  service  = google_cloud_run_service.this.name
+  location = google_cloud_run_service.this.location
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
 
-# resource "google_secret_manager_secret_iam_member" "secret_access" {
-#   count = length(var.secret_refs)
-#   secret_id = var.secret_refs[count.index].secret_id
-#   role      = "roles/secretmanager.secretAccessor"
-#   member    = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
-# }
+resource "google_secret_manager_secret_iam_member" "secret_access" {
+  count = length(var.secret_refs)
+  secret_id = var.secret_refs[count.index].secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${var.project_number}-compute@developer.gserviceaccount.com"
+}
